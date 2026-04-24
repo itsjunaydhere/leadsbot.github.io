@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internal Leads Portal | Session Lock</title>
+    <title>Internal Leads Portal | Multi-Sync Dark</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -27,7 +27,7 @@
         .discord-card { 
             background-color: var(--discord-dark); 
             border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .discord-input {
@@ -49,7 +49,6 @@
             background-color: #4752c4;
         }
 
-        /* Success Toast Animation */
         @keyframes slideUp {
             from { transform: translateY(100%); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
@@ -65,35 +64,29 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
         </svg>
-        <span class="font-bold">Lead sent to Discord!</span>
+        <span class="font-bold">Sync Complete: Discord & Google Sheets</span>
     </div>
 
-    <div id="agentStep" class="discord-card max-w-sm w-full p-8">
+    <div id="agentStep" class="discord-card max-w-sm w-full p-8 transition-all duration-300">
         <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-white mb-1">Agent Login</h2>
-            <p class="text-[var(--discord-muted)] text-sm">Select your name to start your shift</p>
+            <h2 class="text-2xl font-bold text-white mb-1">Agent Portal</h2>
+            <p class="text-[var(--discord-muted)] text-sm">Select your name to begin shift</p>
         </div>
         
         <div class="space-y-4">
-            <div>
-                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase tracking-wider mb-2">Internal ID</label>
-                <select id="agentSelect" class="discord-input w-full p-3 rounded-md outline-none cursor-pointer appearance-none">
-                    <option value="" disabled selected>Select Agent...</option>
-                    <option>Andy</option>
-                    <option>Jackson</option>
-                    <option>Mark</option>
-                    <option>Justin</option>
-                    <option>Jason</option>
-                    <option>Derek</option>
-                    <option>Eric</option>
-                    <option>Usman</option>
-                    <option>Isaac</option>
-                    <option>John Mason</option>
-                </select>
-            </div>
+            <select id="agentSelect" class="discord-input w-full p-3 rounded-md outline-none cursor-pointer appearance-none">
+                <option value="" disabled selected>Choose Agent Name...</option>
+                <option>Andy</option>
+                <option>Jackson</option>
+                <option>Mark</option>
+                <option>Justin</option>
+                <option>Jason</option>
+                <option>Derek</option>
+                <option>Eric</option>
+            </select>
             
-            <button onclick="showForm()" class="btn-blurple w-full text-white font-medium py-3 rounded-md shadow-lg active:scale-[0.98] transition-all">
-                Enter Sales Floor
+            <button onclick="showForm()" class="btn-blurple w-full text-white font-medium py-3 rounded-md shadow-lg active:scale-[0.98]">
+                Start Recording Leads
             </button>
         </div>
     </div>
@@ -102,48 +95,48 @@
         <div class="flex justify-between items-center mb-8 border-b border-[var(--discord-darker)] pb-4">
             <div>
                 <h1 class="text-xl font-bold text-white uppercase tracking-tight">Leads Disposition Form</h1>
-                <p class="text-[var(--discord-muted)] text-xs mt-1 italic">Session Locked • Shift Active</p>
+                <p class="text-[var(--discord-muted)] text-xs mt-1">Status: <span class="text-green-400 font-medium">● Connected to Sheets</span></p>
             </div>
-            <div class="flex items-center gap-3">
-                <div id="displayAgent" class="bg-[var(--discord-darker)] text-indigo-300 px-4 py-2 rounded text-sm font-bold border border-indigo-500/30"></div>
-                <button onclick="location.reload()" class="text-[var(--discord-muted)] hover:text-red-400 text-xs underline decoration-dotted">Logout</button>
-            </div>
+            <div id="displayAgent" class="bg-[var(--discord-darker)] text-indigo-300 px-4 py-2 rounded text-sm font-bold border border-indigo-500/30"></div>
         </div>
 
         <form id="leadsForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <input type="hidden" id="discordUrl" value="https://discord.com/api/webhooks/1497251232966901780/sFl-vzXtXVAsoccAZVoVnNb_sFR2yHu8TSuqyBtGECUfTCmQ1aDWcuUPteMsMMybefHE">
+            <input type="hidden" id="sheetsUrl" value="https://script.google.com/macros/s/AKfycbwIToyB07RdbHgT-HlH4APHfp4GaF3kCPnhaMftzYIEU968xXoGz50vrCmUK8AmJmyS/exec">
+
             <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase tracking-wider mb-2">Client/Business Name</label>
+                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase mb-2">Client/Business Name</label>
                 <input type="text" id="clientName" required class="discord-input w-full p-3 rounded-md outline-none">
             </div>
 
             <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase tracking-wider mb-2">Phone Number</label>
-                <input type="tel" id="phone" required placeholder="000-000-0000" class="discord-input w-full p-3 rounded-md outline-none">
+                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase mb-2">Phone Number</label>
+                <input type="tel" id="phone" required class="discord-input w-full p-3 rounded-md outline-none">
             </div>
 
             <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase tracking-wider mb-2">Country</label>
+                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase mb-2">Country</label>
                 <select id="country" onchange="updateStates()" required class="discord-input w-full p-3 rounded-md outline-none cursor-pointer">
-                    <option value="">Select Country</option>
+                    <option value="">Select...</option>
                     <option value="USA">USA</option>
                     <option value="Canada">Canada</option>
                 </select>
             </div>
 
             <div class="col-span-1">
-                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase tracking-wider mb-2">State / Province</label>
+                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase mb-2">State / Province</label>
                 <select id="state" required class="discord-input w-full p-3 rounded-md outline-none cursor-pointer">
                     <option value="">Select State</option>
                 </select>
             </div>
 
             <div class="col-span-2">
-                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase tracking-wider mb-2">Lead Source</label>
-                <input type="text" id="leadSource" placeholder="Direct, Social, etc." class="discord-input w-full p-3 rounded-md outline-none">
+                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase mb-2">Lead Source</label>
+                <input type="text" id="leadSource" placeholder="Marketing, Cold Call, Referral..." class="discord-input w-full p-3 rounded-md outline-none">
             </div>
 
             <div class="col-span-2">
-                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase tracking-wider mb-2">Lead Remarks</label>
+                <label class="block text-[10px] font-bold text-[var(--discord-muted)] uppercase mb-2">Lead Remarks</label>
                 <textarea id="remarks" rows="3" class="discord-input w-full p-3 rounded-md outline-none resize-none"></textarea>
             </div>
 
@@ -156,8 +149,6 @@
     </div>
 
     <script>
-        const WEBHOOK_URL = "https://discord.com/api/webhooks/1497251232966901780/sFl-vzXtXVAsoccAZVoVnNb_sFR2yHu8TSuqyBtGECUfTCmQ1aDWcuUPteMsMMybefHE";
-
         const stateList = {
             USA: ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
             Canada: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Northwest Territories", "Nunavut", "Yukon"]
@@ -193,48 +184,67 @@
         document.getElementById('leadsForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
+            const discordUrl = document.getElementById('discordUrl').value;
+            const sheetsUrl = document.getElementById('sheetsUrl').value;
             const agent = document.getElementById('agentSelect').value;
             
-            btn.disabled = true;
-            btn.innerHTML = `Syncing...`;
-
-            const payload = {
-                username: "Pipeline Monitor",
-                embeds: [{
-                    title: "📥 Lead Disposition Received",
-                    color: 5814783,
-                    fields: [
-                        { name: "Sales Agent", value: `**${agent}**`, inline: true },
-                        { name: "Client", value: document.getElementById('clientName').value, inline: true },
-                        { name: "Phone", value: document.getElementById('phone').value, inline: true },
-                        { name: "Location", value: `${document.getElementById('state').value}, ${document.getElementById('country').value}`, inline: true },
-                        { name: "Source", value: document.getElementById('leadSource').value || "N/A", inline: true },
-                        { name: "Remarks", value: document.getElementById('remarks').value || "No remarks provided" }
-                    ],
-                    timestamp: new Date()
-                }]
+            const leadData = {
+                agent: agent,
+                clientName: document.getElementById('clientName').value,
+                phone: document.getElementById('phone').value,
+                location: `${document.getElementById('state').value}, ${document.getElementById('country').value}`,
+                source: document.getElementById('leadSource').value || "N/A",
+                remarks: document.getElementById('remarks').value || "N/A"
             };
 
+            btn.disabled = true;
+            btn.innerHTML = `Uploading Lead...`;
+
             try {
-                const res = await fetch(WEBHOOK_URL, {
+                // 1. Sync to Google Sheets
+                const sheetsPromise = fetch(sheetsUrl, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(leadData)
                 });
 
-                if(res.ok) {
-                    // Success UI logic
-                    showToast();
-                    
-                    // Clear only lead-specific inputs, keep agent name
-                    document.getElementById('leadsForm').reset();
-                    document.getElementById('state').innerHTML = '<option value="">Select State</option>';
-                    
-                    btn.disabled = false;
-                    btn.innerHTML = "Submit Disposition";
-                } else { throw new Error(); }
+                // 2. Sync to Discord
+                const discordPayload = {
+                    username: "Internal CRM Bot",
+                    embeds: [{
+                        title: "📥 Lead Recorded",
+                        color: 5814783,
+                        fields: [
+                            { name: "Agent", value: `**${leadData.agent}**`, inline: true },
+                            { name: "Client", value: leadData.clientName, inline: true },
+                            { name: "Phone", value: leadData.phone, inline: true },
+                            { name: "Location", value: leadData.location, inline: true },
+                            { name: "Source", value: leadData.source, inline: true },
+                            { name: "Remarks", value: leadData.remarks }
+                        ],
+                        timestamp: new Date()
+                    }]
+                };
+
+                const discordPromise = fetch(discordUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(discordPayload)
+                });
+
+                // Wait for both to execute
+                await Promise.all([sheetsPromise, discordPromise]);
+
+                // Success Handling
+                showToast();
+                document.getElementById('leadsForm').reset();
+                document.getElementById('state').innerHTML = '<option value="">Select State</option>';
+                btn.disabled = false;
+                btn.innerHTML = "Submit Disposition";
+
             } catch (err) {
-                alert("Failed to send. Please check your internet connection.");
+                alert("Error connecting to services. Check your internet.");
                 btn.disabled = false;
                 btn.innerHTML = "Retry Submission";
             }
